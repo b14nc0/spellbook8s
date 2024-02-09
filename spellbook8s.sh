@@ -187,8 +187,17 @@ deleteCluster (){
     cd $DIR_VAGRANT/vagrant-kubeadm-kubernetes-${nombreCluster[$id]}
     vagrant destroy -f
     rm -rf $DIR_VAGRANT/vagrant-kubeadm-kubernetes-${nombreCluster[$id]}
+    clear
+    title
+    echo -e "\n"
     menuK8S
 }
+
+menuApp (){
+    echo -e "\n \e[1;31m  Menu apps en construccion  \e[0m \n"
+    menu
+}
+
 main() {
 
     clear
