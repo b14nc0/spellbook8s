@@ -1,6 +1,6 @@
 #!/bin/bash
 DIR_VAGRANT="/home/jblanco/src/vagrant"
-DIR_DOCKERCOMPOSE="/home/jblanco/src/genmachine/docker"
+
 
 title () {
     echo "   _____                 ____                __   ____      "
@@ -14,8 +14,6 @@ title () {
     #echo -e "\n \e[1;31m  $mensaje  \e[0m \n"
     echo -e "\e[0;32m $mensaje \e[0m"
 }
-
-
 
 menu () { 
     
@@ -36,7 +34,7 @@ menu () {
         2) 
             clear
             title
-            menuK8S
+            menuApp
             ;;
         99) exit ;;
 
@@ -111,18 +109,22 @@ statusCluster(){
     #    clusterOn[$count]=$statusOn
     #done
     #i=0
-
-    for cluster in `ls $DIR_VAGRANT | cut -d "-" -f 4`
-    do 
-        cd $DIR_VAGRANT/vagrant-kubeadm-kubernetes-$cluster
-        status=`vagrant status | grep  master | awk '{print $2}' `
-        if [[ $status == "poweroff" ]] || [[ $status == "not" ]]; #not created
-        then
-            echo -e "Cluster $cluster \e[1;31m Down \e[0m"
-        else 
-            echo -e "Cluster $cluster \e[1;32m Up \e[0m "
-        fi
-    done
+    if [[ -d $DIR_VAGRANT ]]
+    then 
+        for cluster in `ls $DIR_VAGRANT | cut -d "-" -f 4`
+        do 
+            cd $DIR_VAGRANT/vagrant-kubeadm-kubernetes-$cluster
+            status=`vagrant status | grep  master | awk '{print $2}'`
+            if [[ $status == "poweroff" ]] || [[ $status == "not" ]]; #not created
+            then
+                echo -e "Cluster $cluster \e[1;31m Down \e[0m"
+            else 
+                echo -e "Cluster $cluster \e[1;32m Up \e[0m "
+            fi
+        done
+    else
+        echo -e "\e[1;31m No existe el fichero o el directorio definido en DIR_VAGRANT\e[0m"
+    fi
    
 
 }
@@ -152,7 +154,7 @@ createCluster (){
     interface=`ip a | grep $net | awk '{print $9}'`
     echo `sed -i -e 's/enp2s0/'"$interface"'/g' Vagrantfile`
     vagrant up
-    
+    vagrant ssh node01 -c "cat .kube/config" >> ~/.kube/$nombre
     main
 }
 
@@ -185,7 +187,7 @@ deleteCluster (){
     cd $DIR_VAGRANT/vagrant-kubeadm-kubernetes-${nombreCluster[$id]}
     vagrant destroy -f
     rm -rf $DIR_VAGRANT/vagrant-kubeadm-kubernetes-${nombreCluster[$id]}
-    main
+    menuK8S
 }
 main() {
 
