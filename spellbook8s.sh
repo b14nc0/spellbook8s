@@ -103,19 +103,12 @@ menuK8S(){
 
 statusCluster(){
     
-    #count=0
-    #for statusOn in `vboxmanage list runningvms | cut -d "-" -f4 | cut -d "_" -f1 | sort -u`
-    #do
-    #    clusterOn[$count]=$statusOn
-    #done
-    #i=0
     if [[ -d $DIR_VAGRANT ]]
     then 
         for cluster in `ls $DIR_VAGRANT | cut -d "-" -f 4`
         do 
-            cd $DIR_VAGRANT/vagrant-kubeadm-kubernetes-$cluster
-            status=`vagrant status | grep  master | awk '{print $2}'`
-            if [[ $status == "poweroff" ]] || [[ $status == "not" ]]; #not created
+            status=`vboxmanage list runningvms | cut -d "-" -f4 | cut -d "_" -f1 | sort -u`
+            if [[ $status != $cluster ]]; 
             then
                 echo -e "Cluster $cluster \e[1;31m Down \e[0m"
             else 
