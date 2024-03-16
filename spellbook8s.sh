@@ -1,5 +1,5 @@
 #!/bin/bash
-DIR_VAGRANT="/home/jblanco/src/vagrant"
+DIR_VAGRANT=$HOME/src/vagrant
 
 
 title () {
@@ -179,6 +179,7 @@ deleteCluster (){
     read id
     cd $DIR_VAGRANT/vagrant-kubeadm-kubernetes-${nombreCluster[$id]}
     vagrant destroy -f
+    cd ..
     rm -rf $DIR_VAGRANT/vagrant-kubeadm-kubernetes-${nombreCluster[$id]}
     clear
     title
