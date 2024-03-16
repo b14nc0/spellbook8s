@@ -5,7 +5,7 @@ Este script en Bash te permite administrar clústeres de Kubernetes utilizando V
 ## Requisitos Previos
 
 - [Vagrant](https://www.vagrantup.com/downloads)
-- [Vagrant-pluging] (vagrant plugin install vagrant-disksize)
+- Vagrant-pluging -> vagrant plugin install vagrant-disksize)
 - [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
 
 ## Instalación y Uso
